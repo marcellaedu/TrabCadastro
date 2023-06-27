@@ -11,7 +11,7 @@
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 );
 
-                self::$conn = new PDO("mysql:host=localhost;dbname=dbjogador", "root", "bancodedados", $opcoes);
+                self::$conn = new PDO("mysql:host=localhost;dbname=dbjogador", "root", "", $opcoes);
     
                 //print_r($connec);
             }
