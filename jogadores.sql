@@ -6,6 +6,6 @@ data_nascimento date,
 email varchar(100) NOT NULL,
 telefone varchar(15),
 /* A=Ação, Av=Aventura, R=RPG, S= Simulação, E=Esportes, Es=Estratégias, O=Outros */
-classficacao VARCHAR(2) NOT NULL,
+tipo VARCHAR(2) NOT NULL,
 CONSTRAINT pk_jogadores PRIMARY KEY (id)
 );

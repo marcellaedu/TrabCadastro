@@ -17,7 +17,7 @@ $nickname = "";
 $data = "";
 $email = "";
 $telefone = "";
-$classificacao = "";
+$tipo = "";
 
 
 $nome = isset($_POST['nome']) ? trim($_POST['nome']) : null;
@@ -25,29 +25,29 @@ $nickname = isset($_POST['nickname']) ? trim($_POST['nickname']) : null;
 $data = isset($_POST['data']) ? $_POST['data'] : null;
 $email = isset($_POST['email']) ? trim($_POST['email']) : null;
 $telefone = isset($_POST['telefone']) ? trim($_POST['telefone']) : null;
-$classificacao = isset($_POST['classificacao']) ? $_POST['classificacao'] : null;
+$tipo = isset($_POST['tipo']) ? $_POST['tipo'] : null;
 
 
 
 if (isset($_POST['submetido'])) {
   if (!$nome) {
-    $msgErro = "Informe seu nome";
+    $msgErro = "Informe seu nome!";
   } else if (!$nickname) {
-    $msgErro = "Informe seu nickname";
+    $msgErro = "Informe seu nickname!";
   } else if (!$data) {
-    $msgErro = "Informe a sua data de nascimento";
+    $msgErro = "Informe a sua data de nascimento!";
   } else if (!$email) {
-    $msgErro = "Informe seu email";
+    $msgErro = "Informe seu email!";
   } else if (!$telefone) {
-    $msgErro = "Informe seu telefone";
-  } else if (!$classificacao) {
-    $msgErro = "Selecione uma classificação";
+    $msgErro = "Informe seu telefone!";
+  } else if (!$tipo) {
+    $msgErro = "Selecione o tipo.";
   } else {
 
-    $sql = 'INSERT INTO jogadores (nome, nickname, data_nascimento, email, telefone, classficacao)' .
+    $sql = 'INSERT INTO jogadores (nome, nickname, data_nascimento, email, telefone, tipo)' .
       ' VALUES (?, ?, ?, ? , ? , ?)';
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$nome, $nickname, $data, $email, $telefone, $classificacao]);
+    $stmt->execute([$nome, $nickname, $data, $email, $telefone, $tipo]);
 
     header("location: cadastro.php");
   }
@@ -71,9 +71,10 @@ if (isset($_POST['submetido'])) {
 
 <body>
 
-  <form class="form div" action="" method="POST">
+  <div class="global">
+  <form class=" form div" action="" method="POST">
 
-    <div class="form-title"><span>Cadastrar-se para</span></div>
+    <div class="form-title"><span>Cadastrar-se para o</span></div>
     <div class="title-2"><span>GAME</span></div>
 
     <div class="input-container">
@@ -82,16 +83,16 @@ if (isset($_POST['submetido'])) {
       <input class="input" name="data" id="data" type="date" value="<?php echo $data ?>" placeholder="">
       <input class="input" name="email" id="email" type="email" value="<?php echo $email ?>" placeholder="Email">
       <input class="input" name="telefone" id="telefone" type="tel" value="<?php echo $telefone ?>" placeholder="Telefone">
-      <select name="classificacao">
+      <select name="tipo">
 
-        <option value="">Selecione classificação</option>
-        <option value="A" <?php echo ($classificacao == 'A' ? 'selected' : ''); ?>> Ação </option>
-        <option value="Av" <?php echo ($classificacao == 'Av' ? 'selected' : ''); ?>> Aventura </option>
-        <option value="R" <?php echo ($classificacao == 'R' ? 'selected' : ''); ?>> RPG </option>
-        <option value="S" <?php echo ($classificacao == 'S' ? 'selected' : ''); ?>> Simulação </option>
-        <option value="E" <?php echo ($classificacao == 'E' ? 'selected' : ''); ?>> Esportes </option>
-        <option value="Es" <?php echo ($classificacao == 'Es' ? 'selected' : ''); ?>> Estratégia </option>
-        <option value="O" <?php echo ($classificacao == 'O' ? 'selected' : ''); ?>> Outros </option>
+        <option value="">Selecione o tipo do jogo</option>
+        <option value="A" <?php echo ($tipo == 'A' ? 'selected' : ''); ?>> Ação </option>
+        <option value="Av" <?php echo ($tipo == 'Av' ? 'selected' : ''); ?>> Aventura </option>
+        <option value="R" <?php echo ($tipo == 'R' ? 'selected' : ''); ?>> RPG </option>
+        <option value="S" <?php echo ($tipo == 'S' ? 'selected' : ''); ?>> Simulação </option>
+        <option value="E" <?php echo ($tipo == 'E' ? 'selected' : ''); ?>> Esportes </option>
+        <option value="Es" <?php echo ($tipo == 'Es' ? 'selected' : ''); ?>> Estratégia </option>
+        <option value="O" <?php echo ($tipo == 'O' ? 'selected' : ''); ?>> Outros </option>
       </select><br><br>
     </div>
 
@@ -101,6 +102,10 @@ if (isset($_POST['submetido'])) {
       <span class="star"></span>
       <span class="star"></span>
     </section>
+
+    <div id="divErro">
+    <?php echo $msgErro; ?>
+    </div>
 
     <button type="reset" class="reset">
       <span class="sign-text">limpar</span>
@@ -113,11 +118,6 @@ if (isset($_POST['submetido'])) {
 
   </form>
 
-  <div id="divErro" style="color:white;">
-    <?php echo $msgErro; ?>
-  </div>
-
-
   <?php
   $sql = "SELECT* FROM jogadores";
 
@@ -126,11 +126,11 @@ if (isset($_POST['submetido'])) {
   $result = $stmt->fetchAll();
 
   ?>
-
+  
   <div class=" form div2">
     <div class="form-title"><span>Tabela do</span></div>
     <div class="title-2"><span>JOGADOR</span></div>
-    <table class="table table-hover ">
+    <table class="table ">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -139,7 +139,7 @@ if (isset($_POST['submetido'])) {
           <th scope="col">Data</th>
           <th scope="col">Email</th>
           <th scope="col">Telefone</th>
-          <th scope="col">Classificação</th>
+          <th scope="col">Tipo</th>
           <th scope="col">Excluir</th>
         </tr>
       </thead>
@@ -154,7 +154,7 @@ if (isset($_POST['submetido'])) {
             <td><?= $reg['telefone'] ?></td>
             <td>
               <?php
-              switch ($reg['classficacao']) {
+              switch ($reg['tipo']) {
                 case 'A':
                   echo "Ação";
                   break;
@@ -185,6 +185,7 @@ if (isset($_POST['submetido'])) {
         <tbody>
     </table>
 
+  </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 
